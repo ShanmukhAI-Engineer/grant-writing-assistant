@@ -1,0 +1,30 @@
+﻿# Core existing dependencies (keep your current ones)
+streamlit
+crewai
+groq
+python-docx
+fpdf
+python-dotenv
+langchain
+langchain_community
+langchain-openai
+langchain_huggingface
+langchain_groq
+langgraph
+langgraph-cli[inmem]
+sentence-transformers
+faiss-cpu
+openai
+pypdf
+chromadb
+
+# Enhanced features dependencies
+plotly>=5.18.0
+pandas>=2.1.0
+uuid
+typing-extensions
+
+# Optional for full enhanced version
+streamlit-extras>=0.3.5
+reportlab>=4.0.0
+pdfplumber>=0.10.0
