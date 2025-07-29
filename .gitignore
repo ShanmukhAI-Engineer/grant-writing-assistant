@@ -1,0 +1,33 @@
+﻿# Environment variables - NEVER commit these!
+.env
+*.env
+.env.local
+.env.production
+.env.development
+
+# API Keys and secrets
+config/secrets.json
+secrets/
+private_keys/
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# IDE files
+.vscode/settings.json
+.idea/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+logs/
+
+# Temporary files
+*.tmp
+*.temp
