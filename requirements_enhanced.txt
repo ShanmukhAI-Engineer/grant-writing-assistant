@@ -21,3 +21,4 @@ pillow==10.1.0
 asyncio==3.4.3
 aiohttp==3.9.1
 watchdog==3.0.0
+reportlab==4.0.4
