@@ -84,7 +84,7 @@ def main():
 
         # Mode selection
         app_mode = st.radio(
-            "Mode", ["Standard", "Features Demo", "Setup Guide"])
+            "Mode", ["Standard", "Grant Finder", "Features Demo", "Setup Guide"])
 
     if app_mode == "Standard":
         if not has_api_keys:
@@ -242,6 +242,68 @@ GROQ_API_KEY=your_groq_key_here
             st.info(
                 "Some modules may be missing. Please run: pip install -r requirements_enhanced.txt")
 
+    elif app_mode == "Grant Finder":
+        import pandas as pd
+        from pathlib import Path as _Path
+        from utils.grant_finder import load_local_grants, Answers, rank_grants
+        st.write("### 🔎 Grant Finder (Beta)")
+        st.write("Search a local dataset of grants and prioritize them by your organization type and funding needs. This runs locally without API keys.")
+
+        # Load dataset
+        data_path = _Path("data/grants_dataset.json")
+        if not data_path.exists():
+            st.error("Local dataset not found at data/grants_dataset.json")
+        else:
+            grants = load_local_grants(data_path)
+            # Build choice lists from dataset
+            all_focus = sorted({f for g in grants for f in g.focus_areas})
+            all_geos = sorted({geo for g in grants for geo in g.geographies})
+            all_orgs = sorted({o for g in grants for o in g.org_types} | {"Nonprofit", "For-profit", "Academic", "Individual"})
+
+            with st.form("grant_finder_form"):
+                colA, colB = st.columns(2)
+                with colA:
+                    org = st.selectbox("Organization Type", options=all_orgs, index=(all_orgs.index("Nonprofit") if "Nonprofit" in all_orgs else 0))
+                    fmin = st.number_input("Funding Min (USD)", value=50000, min_value=0, step=5000)
+                    fmax = st.number_input("Funding Max (USD)", value=150000, min_value=1000, step=5000)
+                    within = st.slider("Deadline within (days)", min_value=0, max_value=365, value=90)
+                with colB:
+                    focus = st.multiselect("Focus Areas", options=all_focus, default=all_focus[:2] if all_focus else [])
+                    geos = st.multiselect("Geographies", options=all_geos, default=["US-National"] if "US-National" in all_geos else [])
+                    topn = st.slider("Top N results", min_value=1, max_value=25, value=10)
+                submitted = st.form_submit_button("Search and Prioritize")
+
+            if submitted:
+                if fmax <= fmin:
+                    st.warning("Funding max should be greater than min.")
+                else:
+                    ans = Answers(org_type=str(org), funding_min=int(fmin), funding_max=int(fmax),
+                                  focus_areas=list(focus), geographies=list(geos), deadline_within_days=int(within))
+                    ranked = rank_grants(grants, ans, top_n=int(topn))
+                    if not ranked:
+                        st.info("No matching grants found.")
+                    else:
+                        # Prepare DataFrame
+                        df = pd.DataFrame([
+                            {
+                                "Title": r["title"],
+                                "Source": r["source"],
+                                "Amount Range": f"${r['amount_min']:,} - ${r['amount_max']:,}" if r["amount_min"] and r["amount_max"] else "N/A",
+                                "Deadline": r["deadline"] or "N/A",
+                                "Geographies": ", ".join(r["geographies"]),
+                                "Org Types": ", ".join(r["org_types"]),
+                                "Focus Areas": ", ".join(r["focus_areas"]),
+                                "Score": r["score"],
+                                "Link": r["link"],
+                            }
+                            for r in ranked
+                        ])
+                        st.success(f"Found {len(df)} grants. Showing top {len(df)} by score.")
+                        st.dataframe(df, use_container_width=True)
+
+                        # Download CSV
+                        csv = df.to_csv(index=False).encode("utf-8")
+                        st.download_button("Download CSV", csv, file_name="grant_matches.csv", mime="text/csv")
     elif app_mode == "Features Demo":
         st.write("### 🎯 Enhanced Features Overview")
         st.write("This demonstrates what the full enhanced version includes:")
@@ -381,3 +443,4 @@ GROQ_API_KEY=gsk_your_groq_api_key_here
 
 if __name__ == "__main__":
     main()
+

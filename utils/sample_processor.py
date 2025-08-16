@@ -7,11 +7,10 @@ Supports text files, PDFs, and Word documents.
 """
 
 import os
-import glob
 import io
 import re
 import time
-from typing import List, Dict, Any, Optional, Tuple, Union
+from typing import List, Dict, Any, Optional, Tuple
 from pathlib import Path
 import logging
 from datetime import datetime
