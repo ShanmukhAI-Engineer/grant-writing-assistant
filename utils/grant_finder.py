@@ -32,7 +32,7 @@ class Grant:
 
 
 def load_local_grants(path: Path) -> List[Grant]:
-    data = json.loads(Path(path).read_text(encoding="utf-8"))
+    data = json.loads(Path(path).read_text(encoding="utf-8-sig"))
     return [Grant(**g) for g in data]
 
 
@@ -107,10 +107,12 @@ def score_grant(grant: Grant, answers: Answers, *, weights: Dict[str, float] | N
     weights = weights or DEFAULT_WEIGHTS
 
     # Org type: exact inclusion
-    org_score = 1.0 if answers.org_type.lower() in {t.lower() for t in grant.org_types} else 0.0
+    org_score = 1.0 if answers.org_type.lower(
+    ) in {t.lower() for t in grant.org_types} else 0.0
 
     # Funding: overlap of desired range with grant range
-    fund_score = _range_overlap_score((answers.funding_min, answers.funding_max), (grant.amount_min, grant.amount_max))
+    fund_score = _range_overlap_score(
+        (answers.funding_min, answers.funding_max), (grant.amount_min, grant.amount_max))
 
     # Focus: jaccard overlap
     focus_score = _jaccard(answers.focus_areas, grant.focus_areas)
@@ -126,9 +128,11 @@ def score_grant(grant: Grant, answers: Answers, *, weights: Dict[str, float] | N
     if answers.deadline_within_days and answers.deadline_within_days > 0:
         days = grant.deadline_days_from_now()
         if days is not None and days >= 0 and days <= answers.deadline_within_days:
-            deadline_score = _clamp01(1.0 - (days / float(answers.deadline_within_days)))
+            deadline_score = _clamp01(
+                1.0 - (days / float(answers.deadline_within_days)))
 
-    breakdown = ScoreBreakdown(org_type=org_score, funding=fund_score, focus=focus_score, geo=geo_score, deadline=deadline_score)
+    breakdown = ScoreBreakdown(org_type=org_score, funding=fund_score,
+                               focus=focus_score, geo=geo_score, deadline=deadline_score)
     total = breakdown.total(weights)
     return total, breakdown
 
@@ -159,3 +163,4 @@ def rank_grants(grants: List[Grant], answers: Answers, *, top_n: int = 10, weigh
         })
     rows.sort(key=lambda r: r["score"], reverse=True)
     return rows[:top_n]
+
