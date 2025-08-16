@@ -326,8 +326,9 @@ def test_performance():
         slowest = max(performance_stats.items(), key=lambda x: x[1])
         logger.info(f"\nFastest: {fastest[0]} ({fastest[1]:.4f}s)")
         logger.info(f"Slowest: {slowest[0]} ({slowest[1]:.4f}s)")
-        logger.info(
-            f"Slowest is {slowest[1]/fastest[1]:.1f}x slower than fastest")
+        logger.info(f"Slowest: {slowest[0]} ({slowest[1]:.4f}s)")
+        ratio = (slowest[1]/fastest[1]) if fastest[1] > 0 else float("inf")
+        logger.info(f"Slowest is {ratio:.1f}x slower than fastest")
 def main():
     """Main test function."""
     logger.info("Starting enhanced sample processor tests...")
@@ -351,3 +352,4 @@ def main():
     # logger.info(f"Cleaned up test directory: {TEST_DATA_DIR}")
 if __name__ == "__main__":
     main()
+
