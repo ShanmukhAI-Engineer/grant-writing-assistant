@@ -340,15 +340,15 @@ GROQ_API_KEY=gsk_your_groq_api_key_here
 
         # Show what's installed
         try:
-            import streamlit as st_check
-            import crewai
+            import streamlit as st_check  # noqa: F401
+            import crewai  # noqa: F401
             st.success("✅ Core packages available")
         except ImportError:
             st.error("❌ Missing core packages")
 
         try:
-            import plotly
-            import pandas
+            import plotly  # noqa: F401
+            import pandas  # noqa: F401
             st.success("✅ Enhanced features packages available")
         except ImportError:
             st.warning("⚠️ Enhanced features packages not installed")
