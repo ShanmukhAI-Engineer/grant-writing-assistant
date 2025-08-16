@@ -31,3 +31,7 @@ logs/
 # Temporary files
 *.tmp
 *.temp
+.venv/
+.pytest_cache/
+data/test_samples/
+rag_vector_store/
