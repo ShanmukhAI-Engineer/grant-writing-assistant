@@ -6,11 +6,8 @@ during the grant writing process. This application demonstrates the human-in-the
 approach where users can intervene, guide, and refine the AI's writing in real-time.
 """
 
-import os
-import time
 import asyncio
 import threading
-from typing import Dict, Any, List
 import streamlit as st
 from streamlit.runtime.scriptrunner import add_script_run_ctx
 import plotly.graph_objects as go
@@ -20,8 +17,7 @@ from utils.realtime_writer import (
     RealtimeWriter, 
     WritingContext,
     WritingMode,
-    WritingSpeed,
-    DEFAULT_CONFIG
+    WritingSpeed
 )
 
 # Configure page settings

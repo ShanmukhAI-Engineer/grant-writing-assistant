@@ -21,9 +21,8 @@ import time
 import json
 import logging
 import threading
-import queue
 from enum import Enum
-from typing import List, Dict, Any, Optional, Callable, Union, Generator
+from typing import List, Dict, Any, Callable
 from dataclasses import dataclass, field
 import asyncio
 
@@ -190,7 +189,6 @@ class RealtimeWriter:
     
     def _build_prompt(self, context: WritingContext, instruction: str = None) -> List[Dict[str, str]]:
         """Build a prompt for the language model based on context."""
-        context_dict = context.to_prompt_context()
         
         # Create a system message with writing guidance
         system_message = f"""

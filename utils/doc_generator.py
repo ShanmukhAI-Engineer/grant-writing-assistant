@@ -2,8 +2,6 @@ from io import BytesIO
 from docx import Document
 from fpdf import FPDF
 
-from docx import Document
-from io import BytesIO
 
 # def save_to_word(content):
 #     doc = Document()
@@ -52,8 +50,6 @@ from io import BytesIO
 #     buffer.seek(0)
 #     return buffer
 
-from docx import Document
-from io import BytesIO
 
 def save_to_word(text, version_info="v1.0"):
     if hasattr(text, "output"):
@@ -73,8 +69,6 @@ def save_to_word(text, version_info="v1.0"):
     buffer.seek(0)
     return buffer
 
-from fpdf import FPDF
-from io import BytesIO
 
 def save_to_pdf(text, version_info="v1.0"):
     if not isinstance(text, str):

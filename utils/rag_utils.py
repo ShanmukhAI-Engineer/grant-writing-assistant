@@ -26,8 +26,6 @@
 # rag_utils.py
 
 import os
-import faiss
-import pickle
 # from langchain.vectorstores import FAISS
 from langchain_community.vectorstores import FAISS
 # from langchain.document_loaders import PyPDFLoader

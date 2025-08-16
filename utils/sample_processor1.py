@@ -5,8 +5,6 @@ This script processes your grant samples and uses them to generate new grants
 that match the style, structure, and approach of successful proposals.
 """
 
-import os
-import glob
 from typing import List, Dict, Any, Optional
 from pathlib import Path
 import logging

@@ -19,7 +19,7 @@ import os
 import sys
 import argparse
 import logging
-from typing import Dict, List, Any, Optional, Union
+from typing import Dict, Any, Optional
 from pathlib import Path
 import time
 import json
